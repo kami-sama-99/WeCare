@@ -1,9 +1,22 @@
 "use client"
 
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useUser } from "@clerk/nextjs"
 import Link from "next/link"
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
+import {SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
 
 export default function Header() {
+  const { isSignedIn } = useUser()
+  const router = useRouter()
+
+  // Redirect if user is signed in
+  useEffect(() => {
+    if (isSignedIn) {
+      router.push("/dashboard") // Change to your desired route
+    }
+  }, [isSignedIn, router])
+
   return (
     <header className="bg-white shadow-md">
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -24,7 +37,7 @@ export default function Header() {
 
           {/* Show User Button when user IS logged in */}
           <SignedIn>
-            <UserButton afterSignOutUrl="/" />
+            <UserButton afterSignOutUrl="/dashboard" />
           </SignedIn>
         </div>
       </nav>
