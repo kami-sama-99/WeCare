@@ -11,7 +11,7 @@ export default function Header() {
           WeCare
         </Link>
 
-        <div>
+        <div className="flex items-center">
           {/* Show Sign In & Sign Up when user is NOT logged in */}
           <SignedOut>
             <SignInButton mode="modal">
@@ -26,6 +26,11 @@ export default function Header() {
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
           </SignedIn>
+
+          {/* Link to Report Issue Form */}
+          <Link href="/report-issue" className="ml-4 text-gray-600 hover:text-green-600">
+            Report Issue
+          </Link>
         </div>
       </nav>
     </header>
