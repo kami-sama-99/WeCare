@@ -45,14 +45,13 @@ export default function ReportForm() {
   }
 
   function getRegionFromCoordinates(lat, lon) {
-    const apiKey = "80d4f320d6dd4908b1583ed5d80b7064";
-    const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${apiKey}`;
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
 
     fetch(url)
       .then(response => response.json())
       .then(data => {
-        if (data.results && data.results.length > 0) {
-          const address = data.results[0].components;
+        if (data && data.address) {
+          const address = data.address;
           const location = `${address.city || ''}, ${address.state || ''}, ${address.country || ''}`;
 
           // Update the location field in the formData state
@@ -65,7 +64,7 @@ export default function ReportForm() {
         }
       })
       .catch(error => console.error("Error fetching reverse geocoding data:", error));
-  }
+}
 
   getLocation();
 
