@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useUser } from "@clerk/nextjs"
 import Link from "next/link"
-import {SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
 
 export default function Header() {
   const { isSignedIn } = useUser()
@@ -38,12 +38,13 @@ export default function Header() {
           {/* Show User Button when user IS logged in */}
           <SignedIn>
             <UserButton afterSignOutUrl="/dashboard" />
+            {/* Link to Report Issue Form */}
+            <Link href="/report-issue" className="ml-4 text-gray-600 hover:text-green-600">
+              Report Issue
+            </Link>
           </SignedIn>
 
-          {/* Link to Report Issue Form */}
-          <Link href="/report-issue" className="ml-4 text-gray-600 hover:text-green-600">
-            Report Issue
-          </Link>
+
         </div>
       </nav>
     </header>
