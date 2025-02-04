@@ -163,11 +163,6 @@ export default function ReportForm() {
 
       {imageUrl && <img src={imageUrl} alt="Selected" className="mt-4 max-w-full h-auto rounded-md" />}
 
-
-      <input type="file" name="image" accept="image/*" className="w-full p-2 border rounded-md mt-1" onChange={handleFileUpload} />
-
-      {imageUrl && <img src={imageUrl} alt="Selected" className="mt-4 max-w-full h-auto rounded-md" />}
-
       <label className="flex items-center mt-2">
         <input type="checkbox" name="notify" className="mr-2" />
         I want to be updated on the resolution

@@ -14,7 +14,6 @@ export default function RoleAssignmentPage() {
 
   return (
     <>
-    <Header />
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-6">
       <h2 className="text-2xl font-semibold text-center text-blue-600 mb-6">
         Select Your Role

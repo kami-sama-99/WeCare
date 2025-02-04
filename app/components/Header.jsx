@@ -1,66 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation"; // usePathname to check the current route
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 export default function Header() {
-  const { isSignedIn, user } = useUser(); // Get the user and signed-in status
+  const { isSignedIn, user } = useUser();
   const router = useRouter();
   const pathname = usePathname(); // Get the current route
-  const [scrolling, setScrolling] = useState(false);
-
-  // Track the scroll position
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolling(true); // When scrolling 50px or more, set the header to move down
-      } else {
-        setScrolling(false); // Reset if less than 50px
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll); // Cleanup on unmount
-    };
-  }, []);
-
-  // Redirect based on the user's role after sign-in
-  useEffect(() => {
-    if (isSignedIn && user?.unsafeMetadata?.role) {
-      const role = user.unsafeMetadata.role;
-
-      // Redirect based on role
-      if (role === "NGO") {
-        router.push("/ngo-dashboard"); // Redirect to NGO dashboard
-      } else if (role === "Admin") {
-        router.push("/admin-dashboard"); // Redirect to Admin dashboard
-      } else {
-        router.push("/dashboard"); // Default user dashboard if role is not recognized
-      }
-    }
-  }, [isSignedIn, user, router]);
-
-  // Redirect to /role-assignment if user has no role after sign-in
-  useEffect(() => {
-    if (isSignedIn && !user?.unsafeMetadata?.role) {
-      router.push("/role-assignment"); // Redirect to role assignment page if user has no role
-    }
-  }, [isSignedIn, user, router]);
-
-  // Redirect only if the user is on the home page and signed in
   useEffect(() => {
     if (isSignedIn && pathname === "/") {
-      router.push("/dashboard"); // Redirect only from the home page
+      
+      const hasCompletedOnboarding = user && user.publicMetadata ? user.publicMetadata.hasCompletedOnboarding : undefined;
+
+
+      if (!hasCompletedOnboarding) {
+        router.push("/onboarding"); 
+      } else {
+        router.push("/dashboard"); // Otherwise, go to the default dashboard
+      }
     }
-  }, [isSignedIn, pathname, router]);
+  }, [isSignedIn, pathname, router, user]);
 
   return (
-    <header className={`bg-white shadow-md transition-all ${scrolling ? 'transform translate-y-10' : ''}`}>
+    <header className="bg-white shadow-md">
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold text-green-600">
           WeCare
