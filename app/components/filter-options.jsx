@@ -39,7 +39,7 @@ export default function FilterOptions({ filters, onFilterChange }) {
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-wrap gap-4 sm:flex-col lg:flex-row">
       <CustomSelect
         options={[
           { value: "all", label: "All Categories" },

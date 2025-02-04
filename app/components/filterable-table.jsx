@@ -5,29 +5,7 @@ import FilterOptions from "./filter-options"
 import DataTable from "./data-table"
 import Pagination from "./pagination"
 import { Search } from "lucide-react"
-
-// Mock data for demonstration
-const mockData = [
-  {
-    id: 1,
-    reporter: "John Doe",
-    category: "Bug",
-    description: "App crashes on startup",
-    location: "New York",
-    upvotes: 5,
-    severity: "High",
-  },
-  {
-    id: 2,
-    reporter: "Jane Smith",
-    category: "Feature Request",
-    description: "Add dark mode",
-    location: "London",
-    upvotes: 10,
-    severity: "Medium",
-  },
-  // ... add more mock data here
-]
+import mockData from "../mockData"
 
 export default function FilterableTable() {
   const [data, setData] = useState(mockData)
