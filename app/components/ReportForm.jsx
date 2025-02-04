@@ -13,36 +13,78 @@ export default function ReportForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    if (!locationData) {
+      alert("Please fetch your location before submitting.");
+      return;
+    }
+  
     const formData = new FormData(formRef.current);
+  
+    // Convert FormData to JSON
     const data = Object.fromEntries(formData.entries());
   
-    try {
-      const response = await fetch("/api/reports", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data), // Ensure request body is JSON
-      });
+    // Convert notify checkbox value to boolean
+    data.notify = data.notify === "on";
   
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to submit report.");
-      }
+    // Ensure location is an object
+    data.location = {
+      latitude: locationData.latitude,
+      longitude: locationData.longitude,
+    };
   
-      const result = await response.json();
-      console.log("Server Response:", result);
-      
-      if (result.success) {
+    // Convert image to Base64 (if an image is selected)
+    const file = formData.get("image");
+    if (file && file.size > 0) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = async () => {
+        data.image = reader.result; // Base64 encoded image
+  
+        try {
+          const response = await fetch("/api/reports", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+  
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to submit report.");
+          }
+  
+          const result = await response.json();
+          console.log("Server Response:", result);
+          alert("Report submitted successfully!");
+        } catch (error) {
+          console.error("Error submitting report:", error);
+          alert(error.message);
+        }
+      };
+    } else {
+      // No image, send request immediately
+      data.image = "";
+      try {
+        const response = await fetch("/api/reports", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to submit report.");
+        }
+  
+        const result = await response.json();
+        console.log("Server Response:", result);
         alert("Report submitted successfully!");
-      } else {
-        alert("Failed to submit report.");
+      } catch (error) {
+        console.error("Error submitting report:", error);
+        alert(error.message);
       }
-    } catch (error) {
-      console.error("Error submitting report:", error);
-      alert(error.message);
     }
   };
+  
   
 
   function getLocation() {
