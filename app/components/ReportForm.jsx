@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { db, collection, addDoc, GeoPoint } from "@/firebase"; // Import Firestore functions
+import { db } from "@/firebase";
+import { collection, addDoc, GeoPoint } from "firebase/firestore";
 
 export default function ReportForm() {
   const formRef = useRef(null);
@@ -25,7 +26,7 @@ export default function ReportForm() {
     if (locationData) {
       data.location = new GeoPoint(locationData.latitude, locationData.longitude);
     } else {
-      setError("Location is required.");
+      alert("Location is required.");
       return;
     }
 
@@ -41,7 +42,19 @@ export default function ReportForm() {
     console.log("Submitting Data:", data);
 
     try {
-      await addDoc(collection(db, "Reports"), data);
+      try {
+        console.log("Submitting Data:", data); // Log the data to check if it's correct
+        await addDoc(collection(db, "Reports"), data);
+        console.log("Document added successfully");
+        formRef.current.reset();
+        setLocationData(null);
+        setImageUrl("");
+        alert("Report submitted successfully!");
+      } catch (e) {
+        console.error("Error adding document: ", e); // Log the error message
+        setError("Error submitting report. Please try again.");
+        alert("Error submitting report. Please try again.");
+      }
 
       // Reset form after successful submission
       formRef.current.reset();

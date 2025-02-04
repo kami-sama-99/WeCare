@@ -1,30 +1,28 @@
 "use client";
-
-<<<<<<< HEAD
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useUser } from "@clerk/nextjs"
-import Link from "next/link"
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
-=======
 import { useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation"; // usePathname to check the current route
+import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
->>>>>>> dd70bee24ade6b6791ada132ffacb6aba7841164
 
 export default function Header() {
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
   const router = useRouter();
-  const pathname = usePathname(); // Get the current route
+  const pathname = usePathname();
 
-  // Redirect only if the user is on the home page and signed in
   useEffect(() => {
     if (isSignedIn && pathname === "/") {
-      router.push("/dashboard"); // Redirect only from the home page
+      
+      const hasCompletedOnboarding = user && user.publicMetadata ? user.publicMetadata.hasCompletedOnboarding : undefined;
+
+
+      if (!hasCompletedOnboarding) {
+        router.push("/onboarding"); 
+      } else {
+        router.push("/dashboard"); // Otherwise, go to the default dashboard
+      }
     }
-  }, [isSignedIn, pathname, router]);
+  }, [isSignedIn, pathname, router, user]);
 
   return (
     <header className="bg-white shadow-md">
@@ -34,7 +32,6 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center gap-2">
-          {/* Show Sign In & Sign Up when user is NOT logged in */}
           <SignedOut>
             <SignInButton mode="modal">
               <button className="mr-4 text-gray-600 hover:text-green-600">Login</button>
@@ -44,24 +41,12 @@ export default function Header() {
             </SignUpButton>
           </SignedOut>
 
-          {/* Show User Button when user IS logged in */}
           <SignedIn>
-<<<<<<< HEAD
-            <UserButton afterSignOutUrl="/dashboard" />
-            {/* Link to Report Issue Form */}
+            <UserButton />
             <Link href="/report-issue" className="ml-4 text-gray-600 hover:text-green-600">
               Report Issue
             </Link>
           </SignedIn>
-
-
-=======
-            <Link href="/report-issue" className="ml-4 text-gray-600 hover:text-green-600">
-              Report Issue
-            </Link>
-            <UserButton afterSignOutUrl="/" /> {/* Redirect to home after sign out */}
-          </SignedIn>
->>>>>>> dd70bee24ade6b6791ada132ffacb6aba7841164
         </div>
       </nav>
     </header>
