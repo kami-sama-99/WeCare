@@ -12,47 +12,38 @@ export default function ReportForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     const formData = new FormData(formRef.current);
-
-    // Convert FormData to an object
     const data = Object.fromEntries(formData.entries());
-
-    // Convert "notify" and "anonymous" checkboxes to boolean
-    data.user = formData.get("notify") === "on";
-    delete data.notify;
-
-    // Check if location data exists
-    if (locationData) {
-      data.location = new GeoPoint(locationData.latitude, locationData.longitude);
-    } else {
-      setError("Location is required.");
-      return;
-    }
-
-    // Assign image URL (if uploaded)
-    if (imageUrl) {
-      data.image = imageUrl;
-    } else {
-      data.image = ""; // Store an empty string if no image
-    }
-
-    delete data.file;
-
-    console.log("Submitting Data:", data);
-
+  
     try {
-      await addDoc(collection(db, "Reports"), data);
-
-      // Reset form after successful submission
-      formRef.current.reset();
-      setLocationData(null);
-      setImageUrl("");
-      alert("Report submitted successfully!");
-    } catch (e) {
-      console.error("Error adding document: ", e);
-      setError("Error submitting report. Please try again.");
+      const response = await fetch("/api/reports", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data), // Ensure request body is JSON
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to submit report.");
+      }
+  
+      const result = await response.json();
+      console.log("Server Response:", result);
+      
+      if (result.success) {
+        alert("Report submitted successfully!");
+      } else {
+        alert("Failed to submit report.");
+      }
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      alert(error.message);
     }
   };
+  
 
   function getLocation() {
     setLoadingLocation(true);
@@ -90,50 +81,58 @@ export default function ReportForm() {
 
   return (
     <form ref={formRef} className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg" onSubmit={handleSubmit}>
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">Report Details</h2>
+  <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">Report Details</h2>
 
-      {error && <div className="text-red-500 mb-4">{error}</div>}
+  {error && <div className="text-red-500 mb-4">{error}</div>}
 
-      <label className="block text-gray-700 font-medium">Category of Issue:</label>
-      <select name="categories" required className="w-full p-2 border rounded-md mt-1">
-        <option value="">Select Category</option>
-        <option value="Damaged Road">Damaged Road</option>
-        <option value="Unclean Area">Unclean Area</option>
-        <option value="Open Manhole">Open Manhole</option>
-        <option value="Faulty Streetlight">Faulty Streetlight</option>
-        <option value="Poor Public Transport Condition">Poor Public Transport Condition</option>
-        <option value="Other Infrastructure Issues">Other Infrastructure Issues</option>
-      </select>
+  <label className="block text-gray-700 font-medium">Category of Issue:</label>
+  <select name="category" required className="w-full p-2 border rounded-md mt-1"> {/* Updated name */}
+    <option value="">Select Category</option>
+    <option value="Damaged Road">Damaged Road</option>
+    <option value="Unclean Area">Unclean Area</option>
+    <option value="Open Manhole">Open Manhole</option>
+    <option value="Faulty Streetlight">Faulty Streetlight</option>
+    <option value="Poor Public Transport Condition">Poor Public Transport Condition</option>
+    <option value="Other Infrastructure Issues">Other Infrastructure Issues</option>
+  </select>
 
-      <label className="block text-gray-700 font-medium mt-4">Exact Location:</label>
-      <div className="flex items-center">
-        <input type="text" name="location" required className="w-full p-2 border rounded-md mt-1" disabled value={locationData ? `${locationData.latitude}, ${locationData.longitude}` : ''} />
-        <button
-          type="button"
-          onClick={getLocation}
-          disabled={loadingLocation}
-          className="ml-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-        >
-          {loadingLocation ? "Finding..." : "Find Me"}
-        </button>
-      </div>
+  <label className="block text-gray-700 font-medium mt-4">Exact Location:</label>
+  <div className="flex items-center">
+    <input 
+      type="text" 
+      name="location" 
+      required 
+      className="w-full p-2 border rounded-md mt-1" 
+      disabled 
+      value={locationData ? `${locationData.latitude}, ${locationData.longitude}` : ''} 
+    />
+    <button
+      type="button"
+      onClick={getLocation}
+      disabled={loadingLocation}
+      className="ml-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+    >
+      {loadingLocation ? "Finding..." : "Find Me"}
+    </button>
+  </div>
 
-      <label className="block text-gray-700 font-medium mt-4">Description of the Issue:</label>
-      <textarea name="description" rows="4" required className="w-full p-2 border rounded-md mt-1"></textarea>
+  <label className="block text-gray-700 font-medium mt-4">Description of the Issue:</label>
+  <textarea name="description" rows="4" required className="w-full p-2 border rounded-md mt-1"></textarea>
 
-      <label className="block text-gray-700 font-medium mt-4">Upload Image (Optional):</label>
-      <input type="file" name="file" accept="image/*" className="w-full p-2 border rounded-md mt-1" onChange={handleFileUpload} />
+  <label className="block text-gray-700 font-medium mt-4">Upload Image (Optional):</label>
+  <input type="file" name="image" accept="image/*" className="w-full p-2 border rounded-md mt-1" onChange={handleFileUpload} /> {/* Updated name */}
 
-      {imageUrl && <p className="text-green-500 mt-2">Image selected successfully!</p>}
+  {imageUrl && <p className="text-green-500 mt-2">Image selected successfully!</p>}
 
-      <label className="flex items-center mt-2">
-        <input type="checkbox" name="notify" className="mr-2" />
-        I want to be updated on the resolution
-      </label>
+  <label className="flex items-center mt-2">
+    <input type="checkbox" name="notify" className="mr-2" />
+    I want to be updated on the resolution
+  </label>
 
-      <button type="submit" className="w-full bg-green-600 text-white font-semibold py-2 mt-6 rounded-md hover:bg-green-700 transition">
-        Submit
-      </button>
-    </form>
+  <button type="submit" className="w-full bg-green-600 text-white font-semibold py-2 mt-6 rounded-md hover:bg-green-700 transition">
+    Submit
+  </button>
+</form>
+
   );
 }

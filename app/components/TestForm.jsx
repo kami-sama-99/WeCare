@@ -7,9 +7,13 @@ export default function TestForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(formRef.current);
-        const data = Object.fromEntries(formData.entries());
+        const data = {
+            id: formData.get("Id") || "",  // Ensure valid string
+            createdAt: new Date()  // Firestore requires `Timestamp` or `Date`
+        };        
+        console.log("Submitted data", data);
         try {
-            await addDoc(collection(db, "Reports#test"), data);
+            await addDoc(collection(db, "Reports"), data);
       
             // Reset form after successful submission
             formRef.current.reset();
