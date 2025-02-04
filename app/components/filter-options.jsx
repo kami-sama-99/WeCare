@@ -5,16 +5,16 @@ function CustomSelect({ options, value, onChange, placeholder }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="relative">
+    <div className="relative w-full max-w-xs">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-2 text-left bg-white border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-3 text-left bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:bg-gray-50 transition-colors flex justify-between items-center"
       >
-        {value || placeholder}
-        <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2" size={20} />
+        <span className="text-gray-700">{value || placeholder}</span>
+        <ChevronDown className="text-gray-500" size={20} />
       </button>
       {isOpen && (
-        <ul className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg">
+        <ul className="absolute z-10 w-full mt-2 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
           {options.map((option) => (
             <li
               key={option.value}
@@ -22,7 +22,7 @@ function CustomSelect({ options, value, onChange, placeholder }) {
                 onChange(option.value)
                 setIsOpen(false)
               }}
-              className="px-4 py-2 cursor-pointer hover:bg-gray-100 overflow-hidden"
+              className="px-4 py-2 cursor-pointer text-gray-700 hover:bg-blue-100 hover:text-blue-700 transition-colors"
             >
               {option.label}
             </li>
@@ -39,7 +39,7 @@ export default function FilterOptions({ filters, onFilterChange }) {
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-wrap gap-4 sm:flex-col lg:flex-row">
       <CustomSelect
         options={[
           { value: "all", label: "All Categories" },
@@ -48,7 +48,7 @@ export default function FilterOptions({ filters, onFilterChange }) {
         ]}
         value={filters.category}
         onChange={(value) => handleFilterChange("category", value)}
-        placeholder="Category"
+        placeholder="Select Category"
       />
       <CustomSelect
         options={[
@@ -59,7 +59,7 @@ export default function FilterOptions({ filters, onFilterChange }) {
         ]}
         value={filters.upvotes}
         onChange={(value) => handleFilterChange("upvotes", value)}
-        placeholder="Upvotes"
+        placeholder="Select Upvotes"
       />
       <CustomSelect
         options={[
@@ -69,7 +69,7 @@ export default function FilterOptions({ filters, onFilterChange }) {
         ]}
         value={filters.location}
         onChange={(value) => handleFilterChange("location", value)}
-        placeholder="Location"
+        placeholder="Select Location"
       />
       <CustomSelect
         options={[
@@ -80,9 +80,8 @@ export default function FilterOptions({ filters, onFilterChange }) {
         ]}
         value={filters.severity}
         onChange={(value) => handleFilterChange("severity", value)}
-        placeholder="Severity"
+        placeholder="Select Severity"
       />
     </div>
   )
 }
-
