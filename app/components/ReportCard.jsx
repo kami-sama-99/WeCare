@@ -17,14 +17,14 @@ export default function ReportCard() {
           standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
           versions of Lorem Ipsum.
         </p>
-        <p className="text-sm font-medium">Upvoted by 10 users</p>
+        <p className="text-sm font-medium text-black">Upvoted by 10 users</p>
       </div>
 
       {/* Image Section */}
       <div className="relative">
         <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ReportCard-0tXbHPtFQzZoMXv8o3hywtN5vlLVbJ.png"
-          alt="Report featured image"
+          src="trash.jpg"
+          alt="trash image"
           className="w-full h-64 object-cover"
         />
       </div>

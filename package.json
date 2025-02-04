@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^6.10.6",
     "aos": "^2.3.4",
     "axios": "^1.7.9",
+    "firebase": "^11.2.0",
     "lucide-react": "^0.474.0",
     "next": "15.1.6",
     "react": "^19.0.0",
