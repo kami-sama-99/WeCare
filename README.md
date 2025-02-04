@@ -46,10 +46,6 @@ Start the development server:
 
 npm run dev
 
-Deployment
-
-Note: Deployment is currently not working. Instead, you can view the screenshots provided above.
-
 Design UI/UX:
 
 https://www.figma.com/design/MSDZG8zVobjhRmr65maPVG/Untitled?node-id=0-1&t=sISFpJxDQIu1XjyT-1
