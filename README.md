@@ -1,4 +1,18 @@
-Design: https://www.figma.com/design/MSDZG8zVobjhRmr65maPVG/Untitled?node-id=0-1&t=sISFpJxDQIu1XjyT-1
+WeCare - Community Issue Reporting Platform
+
+WeCare is a platform designed to help communities address local issues by allowing users to report problems (such as open manholes and potholes). Reports can be upvoted or reposted to increase visibility and prompt action from relevant organizations.
+
+Features
+
+Admin Dashboard: Manage reports, users, and platform settings.
+
+Reporter Dashboard: Submit new issues with images and track reported issues.
+
+NGO Dashboard: View reported issues and take necessary actions.
+
+Reporter Form: A simple form to submit community issues with images.
+
+Screenshots
 
 Admin Dashboard: 
 
@@ -15,3 +29,27 @@ NGO Dashboard:
 Reporter Form:
 
 ![image](https://github.com/user-attachments/assets/34bbdc57-2596-40fb-977b-f80def1bd370)
+
+
+Installation
+
+Clone the repository:
+
+git clone https://github.com/your-username/wecare.git
+cd wecare
+
+Install dependencies:
+
+npm install  # For frontend
+
+Start the development server:
+
+npm run dev
+
+Deployment
+
+Note: Deployment is currently not working. Instead, you can view the screenshots provided above.
+
+Design UI/UX:
+
+https://www.figma.com/design/MSDZG8zVobjhRmr65maPVG/Untitled?node-id=0-1&t=sISFpJxDQIu1XjyT-1
