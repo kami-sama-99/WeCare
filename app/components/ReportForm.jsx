@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation"; // Import the useRouter hook
 
 export default function ReportForm() {
   const formRef = useRef(null);
@@ -8,6 +9,7 @@ export default function ReportForm() {
   const [error, setError] = useState(null);
   const [locationData, setLocationData] = useState(null);
   const [imageUrl, setImageUrl] = useState(""); // Store image URL
+  const router = useRouter(); // Initialize the router
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +56,10 @@ export default function ReportForm() {
           const result = await response.json();
           console.log("Server Response:", result);
           alert("Report submitted successfully!");
+
+          // Redirect to the dashboard page after successful submission
+          router.push("/dashboard"); // Use router.push for redirection
+
         } catch (error) {
           console.error("Error submitting report:", error);
           alert(error.message);
@@ -77,6 +83,9 @@ export default function ReportForm() {
         const result = await response.json();
         console.log("Server Response:", result);
         alert("Report submitted successfully!");
+
+        // Redirect to the dashboard page after successful submission
+        router.push("/dashboard"); // Use router.push for redirection
       } catch (error) {
         console.error("Error submitting report:", error);
         alert(error.message);
