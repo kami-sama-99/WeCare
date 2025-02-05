@@ -1,8 +1,13 @@
+import { useUser } from "@clerk/clerk-react"; // Import the useUser hook from Clerk
+
 export default function Profile() {
-    return <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-lg">
+  const { user } = useUser(); // Fetch the current user data
+
+  return (
+    <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-lg">
       {/* Header Section */}
       <div className="bg-green-600 text-white p-6 space-y-3">
-        <h2 className="text-2xl font-bold">Hi Name</h2>
+        <h2 className="text-2xl font-bold">Hi {user?.firstName || user?.username || "User"}</h2> {/* Display user name or fallback to "User" */}
       </div>
 
       {/* Footer Section */}
@@ -22,4 +27,5 @@ export default function Profile() {
         </div>
       </div>
     </div>
+  );
 }

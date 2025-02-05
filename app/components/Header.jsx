@@ -7,22 +7,22 @@ import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 export default function Header() {
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn, user, isLoaded } = useUser();
   const router = useRouter();
   const pathname = usePathname(); // Get the current route
+
   useEffect(() => {
-    if (isSignedIn && pathname === "/") {
-      
-      const hasCompletedOnboarding = user && user.publicMetadata ? user.publicMetadata.hasCompletedOnboarding : undefined;
-
-
+    if (isSignedIn && isLoaded && pathname === "/") {
+      const hasCompletedOnboarding = user?.publicMetadata?.hasCompletedOnboarding;
+  
       if (!hasCompletedOnboarding) {
-        router.push("/onboarding"); 
+        router.push("/onboarding");
       } else {
-        router.push("/dashboard"); // Otherwise, go to the default dashboard
+        router.push("/dashboard");
       }
     }
-  }, [isSignedIn, pathname, router, user]);
+  }, [isSignedIn, isLoaded, pathname, router, user]);
+  
 
   return (
     <header className="bg-white shadow-md">
