@@ -17,7 +17,9 @@ const Report =
 export async function GET() {
   try {
     if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(process.env.MONGODB_URI);
+      await mongoose.connect(process.env.MONGO_URI, {
+        dbName: "test", 
+      });
       console.log("Mongo Connected");
     }
 
